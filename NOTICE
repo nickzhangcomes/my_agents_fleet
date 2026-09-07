@@ -1,0 +1,7 @@
+my_agents_fleet
+Copyright 2026 my_agents_fleet contributors
+
+This distribution includes the my_agents_fleet management layer and the my_agents2
+local CLI adapters. External CLI executables, model services, authentication
+data, and vendor SDKs are not bundled. Their names identify integration targets
+and do not imply affiliation or endorsement.

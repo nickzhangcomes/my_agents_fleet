@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "global": {
+    "business_scenario": "Review and summarize project notes with a small local CLI fleet.",
+    "constraints": [
+      "Explain conclusions clearly. Separate evidence from assumptions."
+    ],
+    "shared": {
+      "instructions_file": "global.md"
+    },
+    "defaults": {
+      "backend": "claude",
+      "workspace": ".",
+      "mode": "readonly",
+      "max_attempts": 1,
+      "max_concurrent": 1,
+      "timeout": 120
+    },
+    "state_dir": "state"
+  },
+  "agents": {
+    "reviewer": {
+      "intro": "Review project notes and identify concrete next steps.",
+      "instructions_file": "agents/reviewer.md",
+      "assets": {
+        "notes": "./data"
+      }
+    },
+    "summarizer": {
+      "intro": "Summarize the supplied text.",
+      "instructions_file": "agents/summarizer.md",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}

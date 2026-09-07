@@ -1,0 +1,47 @@
+[build-system]
+requires = ["hatchling>=1.27,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "my-agents-fleet"
+version = "2.0.1a1"
+description = "Manage local CLI agents, assign roles, and dispatch tasks through one interface."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{name = "my_agents_fleet contributors"}]
+keywords = ["agents", "cli", "sessions", "orchestration", "local-first"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: POSIX",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["build>=1.2,<2", "hatchling>=1.27,<2"]
+
+[project.scripts]
+my-agents-fleet = "my_agents_fleet.cli:main"
+my-agents2 = "my_agents2.__main__:main"
+
+[tool.hatch.build]
+exclude = ["**/__pycache__", "**/*.pyc", "**/state/**", "**/.model-locks/**", "**/models.json", "**/*.db", "**/*.db-*", "**/.env", "**/*.jsonl"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/my_agents_fleet", "src/my_agents2"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src", "/tests", "/examples", "/docs", "/scripts", "/.github",
+  "/README.md", "/README.en.md", "/LICENSE", "/NOTICE", "/CONTRIBUTING.md",
+  "/SECURITY.md", "/CHANGELOG.md", "/pyproject.toml", "/.gitignore", "/.gitattributes",
+]
+exclude = ["**/__pycache__", "**/*.pyc", "**/state/**", "**/.model-locks/**", "**/models.json"]

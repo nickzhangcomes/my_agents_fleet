@@ -1,0 +1,25 @@
+{
+  "default": "claude",
+  "agents": {
+    "claude": {
+      "kind": "cli",
+      "impl": "claude_code"
+    },
+    "codex": {
+      "kind": "cli",
+      "impl": "codex_cli"
+    },
+    "grok": {
+      "kind": "cli",
+      "impl": "grok_code"
+    },
+    "agy": {
+      "kind": "cli",
+      "impl": "antigravity"
+    },
+    "pi": {
+      "kind": "cli",
+      "impl": "pi_cli"
+    }
+  }
+}
