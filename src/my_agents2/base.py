@@ -1,6 +1,6 @@
 """my_agents2 本地 CLI 契约层 —— 统一入参 + 统一事件 + 能力自述。
 
-和 1.0 的四处不同（其余保持同构，Event / Result / Conversation 语义不变）：
+设计上的四个约定：
 
 1. **统一入参**：五个 CLI 后端收同一套参数，换后端零改调用代码 ——
    `mode / cwd / model / effort / timeout / system_prompt / add_dirs`。

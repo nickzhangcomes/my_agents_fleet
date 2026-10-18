@@ -40,7 +40,7 @@ class DistributionTests(unittest.TestCase):
         with patch("subprocess.Popen", side_effect=AssertionError("CLI must remain offline")):
             self.invoke("init", str(destination))
             description = self.invoke("inspect", str(destination))
-            result = json.loads(self.invoke("runs", str(destination)))
+            result = json.loads(self.invoke("runs", str(destination), "--json"))
         self.assertIn("reviewer", description)
         self.assertIn("summarizer", description)
         self.assertEqual(result, {"stats": [], "failures": []})

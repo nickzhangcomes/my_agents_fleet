@@ -1,7 +1,6 @@
 """跑本地 CLI 子进程的公共骨架 —— claude / codex / grok / agy / pi 五个后端共用。
 
-1.0 里这段逻辑抄了三份，结果三份的收尾判断不一致（两份带 `and err_lines`，
-一份不带），超时被杀时静默返回空成功。这里收成一处，只写对一次。
+所有后端共用这一处实现，保证收尾判断一致（超时被杀不会被当成空成功）。
 
 统一处理：找不到命令 / 硬超时（可区分）/ 调用方中止杀进程 / 非零退出。
 """
@@ -29,10 +28,10 @@ def stream_ndjson(
 
     出错时 yield 的是 Event（调用方 `isinstance(item, Event)` 分流后直接透出）。
 
-    和 1.0 的差别，全在收尾：
-      - 非零退出 **无条件**报 error（不再要求 stderr 非空）
+    收尾规则：
+      - 非零退出 **无条件**报 error（不要求 stderr 非空）
       - 超时打 `raw["timed_out"]=True`，让上层能把「超时」和「跑挂了」分开
-      - 调用方 break 中止时不再往正在关闭的生成器里塞事件（1.0 会 RuntimeError）
+      - 调用方 break 中止时不再往正在关闭的生成器里塞事件（否则会 RuntimeError）
     """
     try:
         proc = subprocess.Popen(

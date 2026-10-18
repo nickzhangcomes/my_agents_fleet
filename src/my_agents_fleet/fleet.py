@@ -7,12 +7,7 @@
     fleet.stats(since="2026-08-01")               # 这个月各 agent 跑成什么样
 
 ★ **只用 my_agents2 的公开 API**（`get_agent` / `caps_table` / `list_agents`）。
-  1.0 曾经去摸 `my_agents._load_config()` / `._IMPLS`，再用 `inspect.signature`
-  猜每个后端的构造器收哪些参数，然后一串
-  `if "append_system_prompt" in accepted: … elif "system_prompt_override" in accepted: …`
-  —— 等于**中台要背下每个后端的参数名**，后端一改名中台就崩。
-
-  2.0 里这些全没了：统一入参五个后端收同一套，能力查 `caps` 显式声明。
+  这一层不需要知道每个后端的参数名：五个后端收同一套统一入参，能力由 `caps` 显式声明。
   后端专属参数（mcp_config 之类）走 `extra`；受约束调用禁止覆盖权限。
 """
 from __future__ import annotations
@@ -20,6 +15,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
@@ -44,6 +40,11 @@ _PASSTHROUGH = {"mode", "model", "effort", "timeout", "token_stream",
 
 class FleetConfigError(ValueError):
     """配置本身有问题（引用的文件不存在、后端不认识、参数后端不收…）。加载期就该报出来。"""
+
+
+def _log_stderr(message: str) -> None:
+    """运行提示（如重试）写到 stderr，避免混进命令输出的结果。"""
+    print(message, file=sys.stderr)
 
 
 _CAPACITIES: Dict[str, Capacity] = {}
@@ -282,7 +283,7 @@ class Fleet:
             max_concurrent=int(e.get("max_concurrent") or 0),
             workspace=_lock_target(e.get("lock_workspace"), cwd, str(self.fleet_dir)),
             workspace_timeout=float(e.get("workspace_timeout") or 0),
-            logger=print)
+            logger=_log_stderr)
 
     def spawn_all(self, **overrides) -> Dict[str, object]:
         return {n: self.get(n, **overrides) for n in self.names(active_only=True)}
@@ -344,9 +345,7 @@ class Fleet:
 
     # ── 改名册（给带 UI 的业务用）──
     #    刻意只管**这份配置**的校验和原子写：.md 长文由业务自己写。
-    #    理由：文件叫什么名、内容什么格式，是业务的事 —— 引擎替它命名反而添乱
-    #    （1.0 的 create_agent 会按 safe_filename 生成带 hash 的新文件名，
-    #     把业务想要的干净命名 agents/<handle>.md 晾在一边）。
+    #    理由：文件叫什么名、内容什么格式，是业务的事 —— 引擎替它命名反而添乱。
     def upsert_agent(self, name: str, entry: dict, *, overwrite: bool = True) -> "Fleet":
         """新增或改一个 agent 条目，落盘。`entry` 就是 fleet.json 里那一段。"""
         name = str(name or "").strip()

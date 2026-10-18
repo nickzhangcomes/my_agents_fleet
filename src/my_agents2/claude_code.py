@@ -44,7 +44,7 @@ def _sanitize_env() -> dict:
     正常终端启动根本没有这些变量，所以不会动你自己设的 ANTHROPIC_API_KEY 等。
 
     CLAUDE_EFFORT 也一并剥掉：effort 由本库的 --effort 显式控制，
-    不让父会话的档位悄悄渗进来（1.0 剥了它却没给出口，等于 effort 完全没法设）。
+    不让父会话的档位悄悄渗进来。
     """
     env = dict(os.environ)
     inside_cc = bool(env.get("CLAUDE_CODE_ENTRYPOINT") or env.get("CLAUDE_CODE_SESSION_ID"))

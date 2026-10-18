@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "my-agents-fleet"
-version = "2.0.1a1"
+version = "2.0.1a2"
 description = "Manage local CLI agents, assign roles, and dispatch tasks through one interface."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -41,7 +41,7 @@ packages = ["src/my_agents_fleet", "src/my_agents2"]
 [tool.hatch.build.targets.sdist]
 include = [
   "/src", "/tests", "/examples", "/docs", "/scripts", "/.github",
-  "/README.md", "/README.en.md", "/LICENSE", "/NOTICE", "/CONTRIBUTING.md",
+  "/README.md", "/LICENSE", "/NOTICE", "/CONTRIBUTING.md",
   "/SECURITY.md", "/CHANGELOG.md", "/pyproject.toml", "/.gitignore", "/.gitattributes",
 ]
 exclude = ["**/__pycache__", "**/*.pyc", "**/state/**", "**/.model-locks/**", "**/models.json"]

@@ -65,4 +65,4 @@ __all__ = [
     "Capacity", "WorkspaceBusy",
 ]
 
-__version__ = "2.0.1a1"
+__version__ = "2.0.1a2"

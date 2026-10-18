@@ -1,4 +1,4 @@
-"""my_agents2 —— 本地 CLI agent 的统一调用库（1.0 的重写版）。
+"""my_agents2 —— 本地 CLI agent 的统一调用库。
 
     from my_agents2 import get_agent
 
